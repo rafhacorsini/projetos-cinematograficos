@@ -1,0 +1,31 @@
+# Dependências e build
+node_modules/
+dist/
+*.local
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ---------------------------------------------------------------------------
+# Fontes brutas dos frames
+#
+# Não são carregadas pelo site — servem apenas de entrada para os scripts em
+# scripts/, que geram as versões otimizadas (frames-optimized/, ring-frames/,
+# projeto2-frames/) e essas sim vão versionadas.
+#
+# Somam cerca de 750 MB, e quatro delas passam do limite de 100 MB por arquivo
+# do GitHub, o que impediria o push. Se precisar delas em outra máquina, vale
+# guardá-las fora do git (Drive, S3) em vez de remover estas linhas.
+# ---------------------------------------------------------------------------
+public/*.gif
+public/*.zip
+public/ezgif-frame-*.png
+public/new-raw-pngs/
+novo-projeto/raw-jpegs/
+novo-projeto/*.zip
+
+# Prévias geradas pelos scripts de conferência (recriáveis com --teste)
+scripts/_previa-ring/
