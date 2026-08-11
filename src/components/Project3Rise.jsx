@@ -85,15 +85,12 @@ function Medidor({ pct }) {
         {Array.from({ length: BARRAS_MEDIDOR }, (_, i) => (
           <span
             key={i}
-            className="block h-full w-[2px] shrink-0"
-            style={{ backgroundColor: i < acesas ? AZUL : 'rgba(15,15,22,0.12)' }}
+            className="block h-full w-[2px] shrink-0 transition-colors duration-300"
+            style={{ backgroundColor: i < acesas ? AZUL : 'rgba(255,255,255,0.14)' }}
           />
         ))}
       </div>
-      <span
-        className="text-[2rem] font-medium leading-none tabular-nums sm:text-[2.5rem]"
-        style={{ color: 'rgba(15,15,22,0.45)' }}
-      >
+      <span className="font-clash text-[2rem] font-medium leading-none tabular-nums text-white/80 sm:text-[2.5rem]">
         {pct}%
       </span>
     </div>
@@ -328,7 +325,7 @@ export default function Project3Rise() {
                     Sem assinatura
                   </p>
                   <h2
-                    className="mt-4 font-sans text-[clamp(1.6rem,3.5vw,3.25rem)] font-medium leading-[1.02] tracking-[-0.02em]"
+                    className="mt-4 font-clash text-[clamp(1.6rem,3.5vw,3.25rem)] font-medium leading-[1.02] tracking-[-0.02em]"
                     style={{ color: TINTA }}
                   >
                     {m.titulo.map((linha) => (
@@ -340,54 +337,36 @@ export default function Project3Rise() {
                 {/* Base: métrica (ou recomendação) à esquerda, leitura à direita */}
                 <div className="mt-auto hidden items-end justify-between gap-10 lg:flex">
                   {m.metrica && (
-                    <div className="w-full max-w-[27rem]">
-                      <p
-                        className="font-sans text-[13px] font-semibold uppercase leading-none tracking-[0.08em]"
-                        style={{ color: APAGADO }}
-                      >
+                    <div className="w-full max-w-[28rem] rounded-2xl border border-white/10 bg-[#0b0c14]/85 p-7 sm:p-8 backdrop-blur-xl">
+                      <p className="font-sans text-xs font-semibold uppercase tracking-[0.1em] text-sky-400">
                         {m.metrica.rotulo}
                       </p>
-                      <h3
-                        className="mt-3 font-sans text-[22px] font-medium leading-tight tracking-[-0.01em]"
-                        style={{ color: TINTA }}
-                      >
+                      <h3 className="mt-3.5 font-clash text-[22px] font-medium leading-snug tracking-[-0.01em] text-white">
                         {m.metrica.titulo}
                       </h3>
-                      <p
-                        className="mt-2 flex items-start gap-2 font-sans text-sm font-medium leading-snug"
-                        style={{ color: APAGADO }}
-                      >
+                      <p className="mt-2.5 flex items-start gap-2.5 font-sans text-sm font-normal leading-relaxed text-slate-300/80">
                         <span
-                          className="mt-[6px] block h-2 w-2 shrink-0 rounded-full"
+                          className="mt-[7px] block h-2 w-2 shrink-0 rounded-full"
                           style={{ backgroundColor: AZUL }}
                         />
                         {m.metrica.nota}
                       </p>
-                      <div className="mt-4">
+                      <div className="mt-6">
                         <Medidor pct={m.metrica.pct} />
                       </div>
                     </div>
                   )}
 
                   {m.recomendacao && (
-                    <div className="w-full max-w-[27rem]">
-                      <p
-                        className="font-sans text-[13px] font-semibold uppercase leading-none tracking-[0.08em]"
-                        style={{ color: APAGADO }}
-                      >
+                    <div className="w-full max-w-[28rem]">
+                      <p className="font-sans text-xs font-semibold uppercase tracking-[0.1em] text-sky-400">
                         {m.recomendacao.rotulo}
                       </p>
-                      <div className="mt-3 flex items-center gap-4 rounded-xl bg-white p-4 ring-1 ring-black/5">
-                        <span
-                          className="grid h-14 w-14 shrink-0 place-items-center rounded-lg"
-                          style={{ backgroundColor: 'rgba(56,189,248,0.12)' }}
-                        >
-                          <Moon className="h-6 w-6" strokeWidth={1.6} style={{ color: AZUL }} />
+                      <div className="mt-3.5 flex items-center gap-5 rounded-2xl border border-white/10 bg-[#0b0c14]/85 p-6 sm:p-7 backdrop-blur-xl">
+                        <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-sky-400/20 bg-sky-500/10">
+                          <Moon className="h-6 w-6" strokeWidth={1.5} style={{ color: AZUL }} />
                         </span>
-                        <p
-                          className="font-sans text-sm font-medium leading-snug"
-                          style={{ color: TINTA }}
-                        >
+                        <p className="font-sans text-sm font-medium leading-relaxed text-white/90">
                           {m.recomendacao.texto}
                         </p>
                       </div>
@@ -411,7 +390,7 @@ export default function Project3Rise() {
                           {rotulo}
                         </span>
                         <span
-                          className="font-sans text-[15px] font-medium tabular-nums"
+                          className="font-clash text-[15px] font-medium tabular-nums"
                           style={{ color: TINTA }}
                         >
                           {valor}

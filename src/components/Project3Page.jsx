@@ -1,6 +1,10 @@
 import React from 'react';
 import Project3Hero from './Project3Hero';
 import Project3Rise from './Project3Rise';
+import Project3Precisao from './Project3Precisao';
+import Project3Coracao from './Project3Coracao';
+import Project3Video from './Project3Video';
+import Project3Rodape from './Project3Rodape';
 
 /* O hero fica parado enquanto a seção seguinte sobe por cima dele.
 
@@ -24,6 +28,10 @@ export default function Project3Page() {
       </div>
 
       <Project3Rise />
+      <Project3Precisao />
+      <Project3Coracao />
+      <Project3Video />
+      <Project3Rodape />
     </div>
   );
 }

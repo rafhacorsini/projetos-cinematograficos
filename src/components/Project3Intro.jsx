@@ -45,7 +45,9 @@ export default function Project3Intro() {
        centralizado cairia em cima dela (luminância ~50, ilegível). A faixa
        à esquerda só se mantém clara até uns 360px, então ali o bloco ancora
        no topo; do sm pra cima volta a centralizar. */
-    <div className="pointer-events-none absolute inset-0 z-40 flex flex-col justify-start px-5 pt-28 sm:justify-center sm:px-7">
+    /* px-* acompanha o Project3Nav: a logo e o título ficam na mesma coluna.
+       Mudar aqui sem mudar lá quebra esse alinhamento. */
+    <div className="pointer-events-none absolute inset-0 z-40 flex flex-col justify-start px-5 pt-28 sm:justify-center sm:px-7 lg:px-16">
       <div className="pointer-events-auto max-w-[32rem] text-left">
         {/* OLHO */}
         <p
@@ -63,7 +65,7 @@ export default function Project3Intro() {
             descidas (ç, ã), que o leading apertado de 1.12 cortaria. */}
         <h1
           ref={tituloRef}
-          className="mt-5 inline-block font-sans text-[clamp(1.45rem,3vw,2.75rem)] font-medium leading-[1.12] tracking-tight"
+          className="mt-5 inline-block font-clash text-[clamp(1.45rem,3vw,2.75rem)] font-medium leading-[1.12] tracking-tight"
           style={{ color: TINTA }}
         >
           {LINHAS_TITULO.map((linha) => (
@@ -96,7 +98,7 @@ export default function Project3Intro() {
         <button
           type="button"
           data-anim="intro-cta"
-          className="mt-9 flex h-14 items-center justify-between gap-6 rounded-lg pl-6 pr-5 text-white transition-opacity hover:opacity-85"
+          className="group mt-9 flex h-14 items-center justify-between gap-6 rounded-lg pl-6 pr-5 text-white transition-opacity hover:opacity-85 active:scale-[0.99]"
           style={{
             backgroundColor: TINTA,
             width: larguraTitulo ? `${larguraTitulo}px` : 'fit-content',
@@ -105,7 +107,7 @@ export default function Project3Intro() {
           <span className="whitespace-nowrap text-xs font-semibold uppercase tracking-[0.12em] sm:text-sm">
             Começar agora
           </span>
-          <ArrowRight className="h-5 w-5 shrink-0" strokeWidth={2} />
+          <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1" strokeWidth={2} />
         </button>
       </div>
     </div>

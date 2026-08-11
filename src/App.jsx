@@ -4,24 +4,26 @@ import Header from './components/Header';
 import UnifiedExperience from './components/UnifiedExperience';
 import Project2Scrubber from './components/Project2Scrubber';
 import Project3Page from './components/Project3Page';
+import Project4Page from './components/Project4Page';
+
+/* Mapa de rotas em um lugar só. Antes a tradução caminho -> projeto estava
+   escrita duas vezes (no estado inicial e no popstate), e cada projeto novo
+   pedia edição nos dois — fácil de esquecer um. */
+const ROTAS = {
+  '/projeto2': 'projeto2',
+  '/projeto3': 'projeto3',
+  '/projeto4': 'projeto4',
+};
+
+const projetoDoCaminho = () => ROTAS[window.location.pathname] ?? 'projeto1';
 
 export default function App() {
-  const [currentProject, setCurrentProject] = useState(() => {
-    const path = window.location.pathname;
-    if (path === '/projeto3') return 'projeto3';
-    if (path === '/projeto2') return 'projeto2';
-    return 'projeto1';
-  });
+  const [currentProject, setCurrentProject] = useState(projetoDoCaminho);
 
   useEffect(() => {
-    const handlePopState = () => {
-      const path = window.location.pathname;
-      if (path === '/projeto3') setCurrentProject('projeto3');
-      else if (path === '/projeto2') setCurrentProject('projeto2');
-      else setCurrentProject('projeto1');
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    const aoNavegar = () => setCurrentProject(projetoDoCaminho());
+    window.addEventListener('popstate', aoNavegar);
+    return () => window.removeEventListener('popstate', aoNavegar);
   }, []);
 
   return (
@@ -38,6 +40,8 @@ export default function App() {
         {currentProject === 'projeto2' && <Project2Scrubber />}
 
         {currentProject === 'projeto3' && <Project3Page />}
+
+        {currentProject === 'projeto4' && <Project4Page />}
       </div>
     </SmoothScroll>
   );

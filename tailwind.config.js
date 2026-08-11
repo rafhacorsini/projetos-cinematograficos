@@ -24,6 +24,10 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         display: ['Space Grotesk', 'Syne', 'Outfit', 'Inter', 'sans-serif'],
+        /* Fonte de display do projeto 3. Entra como família nova em vez de
+           substituir 'display', que os projetos 1 e 2 já usam — trocar aquela
+           mudaria a cara deles junto. */
+        clash: ['Clash Grotesk', 'Space Grotesk', 'Inter', 'sans-serif'],
         serif: ['Playfair Display', 'Cormorant Garamond', 'serif'],
         montecarlo: ['MonteCarlo', 'cursive'],
         syne: ['Syne', 'sans-serif'],

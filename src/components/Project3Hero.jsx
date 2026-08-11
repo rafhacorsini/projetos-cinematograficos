@@ -2,9 +2,34 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import Project3Nav from './Project3Nav';
 import Project3Intro from './Project3Intro';
+import Project3Chips from './Project3Chips';
 
-const HERO_IMG_DEFAULT = 'https://res.cloudinary.com/dwmrunhxa/image/upload/v1785437593/98ef51ed-7e2a-4ace-9e4c-f1aa28578e6f_1_g0ntjt.png';
-const HERO_IMG_HOVER = 'https://res.cloudinary.com/dwmrunhxa/image/upload/v1785437851/cdb76d67-dd03-4230-94f1-454395dd5ca6_1_uptxh7.png';
+const BASE_CLOUDINARY = 'https://res.cloudinary.com/dwmrunhxa/image/upload';
+const ID_PADRAO = 'v1785437593/98ef51ed-7e2a-4ace-9e4c-f1aa28578e6f_1_g0ntjt.png';
+const ID_HOVER = 'v1785437851/cdb76d67-dd03-4230-94f1-454395dd5ca6_1_uptxh7.png';
+
+/* Os arquivos originais são PNG de 1,5 MB a 1440x1024. Numa tela retina o
+   navegador estica isso para 2880 e a foto fica mole.
+   - f_auto,q_auto: entrega WebP/AVIF — 1,5 MB vira 62 KB, sem perda visível.
+   - e_sharpen:60: o ganho real de nitidez. O upscale por IA da Cloudinary
+     (e_upscale) devolve 400 nesta conta, então não há como criar detalhe
+     que não existe; a máscara de nitidez é o que faz a imagem ler crocante.
+     Testei 150 também: cria halo claro na borda do anel e deixa a pele com
+     aspecto processado. 60 é o limite antes do artefato.
+   O srcset deixa o navegador escolher: retina puxa 2880 (152 KB), celular
+   fica no 1440. */
+/* As transformações são encadeadas com BARRA, não com vírgula. A sintaxe de
+   vírgula da Cloudinary quebra o srcset: vírgula é o separador de candidatos,
+   então "w_1440,e_sharpen:60,f_auto" vira quatro entradas inválidas e o
+   navegador descarta o srcset inteiro e cai no src. */
+const LARGURAS = [1440, 2160, 2880];
+const receita = (l) => `w_${l}/e_sharpen:60/f_auto/q_auto`;
+
+const urlDe = (id, l) => `${BASE_CLOUDINARY}/${receita(l)}/${id}`;
+const srcSetDe = (id) => LARGURAS.map((l) => `${urlDe(id, l)} ${l}w`).join(', ');
+
+const HERO_IMG_DEFAULT = urlDe(ID_PADRAO, 2880);
+const HERO_IMG_HOVER = urlDe(ID_HOVER, 2880);
 
 /* Raio do holofote = 26% da largura do frame (o círculo visível fica em ~20%) */
 const SPOT_RATIO = 0.26;
@@ -47,13 +72,7 @@ export default function Project3Hero() {
     const ctx = gsap.context(() => {
       if (semAnimacao) {
         gsap.set(frame, { scale: 1, opacity: 1 });
-        /* nav-links fica de fora do reset de transform: ele se centraliza
-           com translate do Tailwind, e um y:0 aqui apagaria isso. */
-        gsap.set(
-          '[data-anim="nav-item"], [data-anim="intro-olho"], [data-anim="intro-linha"], [data-anim="intro-sub"], [data-anim="intro-cta"]',
-          { opacity: 1, y: 0, yPercent: 0 },
-        );
-        gsap.set('[data-anim="nav-links"]', { opacity: 1 });
+        gsap.set('[data-anim]', { opacity: 1, y: 0, yPercent: 0 });
         entradaOkRef.current = true;
         return;
       }
@@ -61,11 +80,13 @@ export default function Project3Hero() {
       // Estado inicial
       gsap.set(frame, { scale: 1.08, opacity: 0 });
       gsap.set('[data-anim="nav-item"]', { opacity: 0, y: -10 });
-      gsap.set('[data-anim="nav-links"]', { opacity: 0 });
       gsap.set('[data-anim="intro-olho"]', { opacity: 0, y: 12 });
       gsap.set('[data-anim="intro-linha"]', { yPercent: 110 });
       gsap.set('[data-anim="intro-sub"]', { opacity: 0, y: 12 });
       gsap.set('[data-anim="intro-cta"]', { opacity: 0, y: 14 });
+      /* Os chips não usam y: o parallax de mouse escreve nessa propriedade
+         depois, e animar y aqui deixaria os dois brigando pelo transform. */
+      gsap.set('[data-anim="chip"]', { opacity: 0, scale: 0.96 });
 
       const tl = gsap.timeline({
         defaults: { ease: 'power3.out' },
@@ -78,7 +99,6 @@ export default function Project3Hero() {
       tl.to(frame, { opacity: 1, duration: 1.4, ease: 'power2.out' }, 0)
         .to(frame, { scale: 1, duration: 2.6, ease: 'expo.out' }, 0)
         .to('[data-anim="nav-item"]', { opacity: 1, y: 0, duration: 0.9, stagger: 0.08 }, 0.9)
-        .to('[data-anim="nav-links"]', { opacity: 1, duration: 0.9 }, 1.05)
         .to('[data-anim="intro-olho"]', { opacity: 1, y: 0, duration: 0.8 }, 1.05)
         .to('[data-anim="intro-linha"]', {
           yPercent: 0,
@@ -87,7 +107,8 @@ export default function Project3Hero() {
           stagger: 0.09,
         }, 1.2)
         .to('[data-anim="intro-sub"]', { opacity: 1, y: 0, duration: 0.9 }, 1.75)
-        .to('[data-anim="intro-cta"]', { opacity: 1, y: 0, duration: 0.9 }, 1.9);
+        .to('[data-anim="intro-cta"]', { opacity: 1, y: 0, duration: 0.9 }, 1.9)
+        .to('[data-anim="chip"]', { opacity: 1, scale: 1, duration: 1, stagger: 0.12 }, 1.6);
     }, stageRef);
 
     return () => ctx.revert();
@@ -244,6 +265,8 @@ export default function Project3Hero() {
         {/* FOTO 1: sempre visível por baixo */}
         <img
           src={HERO_IMG_DEFAULT}
+          srcSet={srcSetDe(ID_PADRAO)}
+          sizes="100vw"
           alt="Mão usando o anel inteligente"
           draggable={false}
           fetchpriority="high"
@@ -268,6 +291,8 @@ export default function Project3Hero() {
           {/* FOTO 2: só aparece dentro do círculo */}
           <img
             src={HERO_IMG_HOVER}
+            srcSet={srcSetDe(ID_HOVER)}
+            sizes="100vw"
             alt=""
             aria-hidden="true"
             draggable={false}
@@ -277,6 +302,7 @@ export default function Project3Hero() {
         </div>
       </div>
 
+      <Project3Chips />
       <Project3Intro />
       <Project3Nav />
     </section>
